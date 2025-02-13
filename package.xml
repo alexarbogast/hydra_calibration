@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hydra_calibration</name>
+  <version>0.1.0</version>
+  <description>The hydra_calibration package</description>
+  <maintainer email="arbogastaw@gmail.com">Alex Arbogast</maintainer>
+  <license>Apache2</license>
+
+  <author>Alex Arbogast</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>hydra_bringup</exec_depend>
+  <exec_depend>hydra_description</exec_depend>
+  <exec_depend>hydra_hardware</exec_depend>
+  <exec_depend>hydra_moveit_config</exec_depend>
+  <depend>rospy</depend>
+  <depend>geometry_msgs</depend>
+  <depend>moveit_commander</depend>
+</package>
