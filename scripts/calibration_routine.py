@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import sys
 import rospy
 import moveit_commander
@@ -22,15 +23,6 @@ from sensor_msgs.msg import JointState
 HYDRA_GROUP = "hydra_planning_group"
 ROB1_GROUP = "rob1_planning_group"
 ROB2_GROUP = "rob2_planning_group"
-
-
-def wait_for_input(msg=None):
-    if msg is not None:
-        rospy.loginfo(msg)
-
-    x = input()
-    if x == "x":
-        exit()
 
 
 class CalibrationRoutine(object):
@@ -62,10 +54,10 @@ class CalibrationRoutine(object):
 
     def exec(self):
         self.rob1_routine()
-        wait_for_input("Press input to move to rob2 routine")
+        self.wait_for_input("Press input to move to rob2 routine")
         self.rob2_routine()
 
-        wait_for_input("Press input to move home")
+        self.wait_for_input("Press input to move home")
         self.hydra_group.set_named_target("zeros")
         self.execute_plan(self.hydra_group)
 
@@ -108,14 +100,14 @@ class CalibrationRoutine(object):
                 [-l2, -w2, -h2],
             ]
         )
-        points += np.array([0.0, 0.0, 0.2])
+        points += np.array([0.0, 0.0, 0.4])
         group.set_pose_reference_frame("hydra_base")
 
         for i in range(len(points)):
             pose = list(np.hstack((points[i], q)))
             group.set_pose_target(pose, eef)
 
-            wait_for_input("Waiting for input ('x' to cancel)")
+            self.wait_for_input("Waiting for input ('x' to cancel)")
             rospy.loginfo(f"Moving to cube point {i + 1}: \npose={pose}\n")
             self.execute_plan(group)
 
@@ -137,6 +129,14 @@ class CalibrationRoutine(object):
     def execute_plan(self, group):
         group.go(wait=True)
         group.stop()
+
+    def wait_for_input(self, msg=None):
+        if msg is not None:
+            rospy.loginfo(msg)
+
+        x = input()
+        if x == "x":
+            exit()
 
 
 def main():
